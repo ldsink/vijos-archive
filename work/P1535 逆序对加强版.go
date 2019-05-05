@@ -8,7 +8,7 @@ func mergeSort() {
 	var n int
 	fmt.Scanf("%d", &n)
 	var data [2][1000000]int
-	for i := 0; i < n; i ++ {
+	for i := 0; i < n; i++ {
 		fmt.Scanf("%d", &data[1][i])
 	}
 	var leftStart, leftEnd, rightStart, rightEnd int
@@ -41,24 +41,24 @@ func mergeSort() {
 				if data[targetLevel][leftStart] > data[targetLevel][rightStart] {
 					data[currentLevel][position] = data[targetLevel][rightStart]
 					count += int64(leftEnd + 1 - leftStart)
-					rightStart ++
-					position ++
+					rightStart++
+					position++
 				} else {
 					data[currentLevel][position] = data[targetLevel][leftStart]
-					leftStart ++
-					position ++
+					leftStart++
+					position++
 				}
 			}
 			for ; leftStart <= leftEnd; leftStart++ {
 				data[currentLevel][position] = data[targetLevel][leftStart]
 				position++
 			}
-			for ; rightStart <= rightEnd; rightStart ++ {
+			for ; rightStart <= rightEnd; rightStart++ {
 				data[currentLevel][position] = data[targetLevel][rightStart]
 				position++
 			}
 		}
-		for ; position < n; position ++ {
+		for ; position < n; position++ {
 			data[currentLevel][position] = data[targetLevel][position]
 		}
 	}
@@ -104,7 +104,7 @@ func segmentTree() {
 	fmt.Scanf("%d", &n)
 	var tree myTree
 	var result int64
-	for i := 0; i < n; i ++ {
+	for i := 0; i < n; i++ {
 		fmt.Scanf("%d", &num)
 		insertTree(num, 0, 0, maxNum, &tree)
 		result += queryTree(0, 0, maxNum, num+1, maxNum, &tree)
