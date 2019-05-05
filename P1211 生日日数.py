@@ -9,4 +9,3 @@ data = list(map(int, input().strip().split(' ')))
 date = datetime.date(year=data[0], month=data[1], day=data[2])
 date += datetime.timedelta(days=10000)
 print(date.strftime('%Y-%-m-%-d'))
-

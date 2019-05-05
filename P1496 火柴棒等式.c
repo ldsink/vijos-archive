@@ -1,24 +1,48 @@
 #include<stdio.h>
 
-int main()
-{
+int main() {
     int n;
-    scanf("%d",&n);
-    switch(n)
-    {
-        case 13:printf("1");break;
-        case 14:printf("2");break;
-        case 15:printf("8");break;
-        case 16:printf("9");break;
-        case 17:printf("6");break;
-        case 18:printf("9");break;
-        case 19:printf("29");break;
-        case 20:printf("39");break;
-        case 21:printf("38");break;
-        case 22:printf("65");break;
-        case 23:printf("88");break;
-        case 24:printf("128");break;
-        default :printf("0");break;
+    scanf("%d", &n);
+    switch (n) {
+        case 13:
+            printf("1");
+            break;
+        case 14:
+            printf("2");
+            break;
+        case 15:
+            printf("8");
+            break;
+        case 16:
+            printf("9");
+            break;
+        case 17:
+            printf("6");
+            break;
+        case 18:
+            printf("9");
+            break;
+        case 19:
+            printf("29");
+            break;
+        case 20:
+            printf("39");
+            break;
+        case 21:
+            printf("38");
+            break;
+        case 22:
+            printf("65");
+            break;
+        case 23:
+            printf("88");
+            break;
+        case 24:
+            printf("128");
+            break;
+        default :
+            printf("0");
+            break;
     }
     return 0;
 }

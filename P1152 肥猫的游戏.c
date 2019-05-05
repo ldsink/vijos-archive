@@ -1,33 +1,40 @@
 #include<stdio.h>
 
-int N,Switch,Site[3];
+int N, Switch, Site[3];
 
-int main()
-{
-    scanf("%d",&N);
-    scanf("%d %d %d",&Site[0],&Site[1],&Site[2]);
-    int a,b,c;
-    if(Site[0]>Site[1])
-        {a=Site[0];Site[0]=Site[1];Site[1]=a;}
-    if(Site[0]>Site[2])
-        {a=Site[0];Site[0]=Site[2];Site[2]=a;}
-    if(Site[1]>Site[2])
-        {a=Site[2];Site[2]=Site[1];Site[1]=a;}
-    //ÅÐ¶ÏºÚÈý½ÇÐÎÊÇ·ñÔÚÍâ²¿¡£
-    if(Site[0]+1==Site[1]&&Site[1]+1==Site[2])
-        Switch=1;
-    else if(Site[0]==0&&Site[1]==N-2&&Site[2]==N-1)
-        Switch=1;
-    else if(Site[0]==0&&Site[1]==1&&Site[2]==N-1)
-        Switch=1;
-    //¼ÆËãÈý½ÇÐÎÔÚÄÚ²¿µÄ½á¹û¡£
-    if(Switch==0)
-    {
-        N-=3;
-        if(N%2==0) Switch=0;
-        else Switch=1;
+int main() {
+    scanf("%d", &N);
+    scanf("%d %d %d", &Site[0], &Site[1], &Site[2]);
+    int a, b, c;
+    if (Site[0] > Site[1]) {
+        a = Site[0];
+        Site[0] = Site[1];
+        Site[1] = a;
     }
-    if(Switch==1) printf("JMcat Win\n");
+    if (Site[0] > Site[2]) {
+        a = Site[0];
+        Site[0] = Site[2];
+        Site[2] = a;
+    }
+    if (Site[1] > Site[2]) {
+        a = Site[2];
+        Site[2] = Site[1];
+        Site[1] = a;
+    }
+    //ï¿½Ð¶Ïºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½
+    if (Site[0] + 1 == Site[1] && Site[1] + 1 == Site[2])
+        Switch = 1;
+    else if (Site[0] == 0 && Site[1] == N - 2 && Site[2] == N - 1)
+        Switch = 1;
+    else if (Site[0] == 0 && Site[1] == 1 && Site[2] == N - 1)
+        Switch = 1;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½
+    if (Switch == 0) {
+        N -= 3;
+        if (N % 2 == 0) Switch = 0;
+        else Switch = 1;
+    }
+    if (Switch == 1) printf("JMcat Win\n");
     else printf("PZ Win\n");
-	return 0;
+    return 0;
 }

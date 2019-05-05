@@ -5,63 +5,56 @@ Dijkstra
 */
 
 #include<stdio.h>
-#define MaxNum 1000000 //±ßÈ¨×î´óÖµ
 
-int N; //½ÚµãÊıÄ¿
-int Dist[501]; //µ½½Úµã1µÄ×î¶ÌÂ·¾¶Öµ
-int Data[501][501]; //ÁÚ½Ó¾ØÕó
-char State[501]; //½Úµã±»ËÑË÷¹ı×´Ì¬Ö¸Ê¾
+#define MaxNum 1000000 //è¾¹æƒæœ€å¤§å€¼
 
-//²éÕÒÈ¨Öµ×îĞ¡µÄ½Úµã
-int Findmin()
-{
-    int var,minnode=0, min=MaxNum;
-    for(var=1;var<=N;var++)
-        if ((Dist[var]<min) && (!State[var]))
-        {
-            min=Dist[var];
-            minnode=var;
+int N; //èŠ‚ç‚¹æ•°ç›®
+int Dist[501]; //åˆ°èŠ‚ç‚¹1çš„æœ€çŸ­è·¯å¾„å€¼
+int Data[501][501]; //é‚»æ¥çŸ©é˜µ
+char State[501]; //èŠ‚ç‚¹è¢«æœç´¢è¿‡çŠ¶æ€æŒ‡ç¤º
+
+//æŸ¥æ‰¾æƒå€¼æœ€å°çš„èŠ‚ç‚¹
+int Findmin() {
+    int var, minnode = 0, min = MaxNum;
+    for (var = 1; var <= N; var++)
+        if ((Dist[var] < min) && (!State[var])) {
+            min = Dist[var];
+            minnode = var;
         }
     return minnode;
 }
 
-int main()
-{
-    freopen("Dijkstra.in","r",stdin);
-	freopen("Dijkstra.out","w",stdout);
-    scanf("%d",&N);
-	int p,q;
-    for(p=1; p<=N; p++)
-        for(q=1; q<=N; q++)
-        {
-            scanf("%d",&Data[p][q]);
-            if (Data[p][q]==0) Data[p][q]=MaxNum;
+int main() {
+    freopen("Dijkstra.in", "r", stdin);
+    freopen("Dijkstra.out", "w", stdout);
+    scanf("%d", &N);
+    int p, q;
+    for (p = 1; p <= N; p++)
+        for (q = 1; q <= N; q++) {
+            scanf("%d", &Data[p][q]);
+            if (Data[p][q] == 0) Data[p][q] = MaxNum;
         }
-    //³õÊ¼»¯
-	int var;
-    for(var=1; var<=N; var++)
-        Dist[var]=Data[1][var];
-	State[1]=1;
-	int done=1;
-	while (done<N)
-	{
-		int node=Findmin();
-		if (node!=0)
-		{
-			done++; //ÕÒµ½µÄµãµÄÊıÄ¿¼Ó1
-			State[node]=1; //±ê¼ÇÒÑ¾­ÕÒµ½ÁË´Ó½Úµã1µ½½ÚµãnodeµÄ×î¶ÌÂ·¾¶
-			for(var=1; var<=N; var++)//¸üĞÂ»¹Ã»ÓĞÕÒµ½µÄµãµÄÂ·¾¶Öµ
-				if ((Dist[var]>Dist[node]+Data[node][var]) && (!State[var]))
-					Dist[var]=Dist[node]+Data[node][var];
-		}
-		else break;
-	}
-	for(var=1; var<=N; var++)
-	{
-		if (Dist[var]==MaxNum) printf("-1");
-		else printf("%d",Dist[var]);
-		if (var==N) printf("\n");
-		else printf(" ");
-	}
-	return 0;
+    //åˆå§‹åŒ–
+    int var;
+    for (var = 1; var <= N; var++)
+        Dist[var] = Data[1][var];
+    State[1] = 1;
+    int done = 1;
+    while (done < N) {
+        int node = Findmin();
+        if (node != 0) {
+            done++; //æ‰¾åˆ°çš„ç‚¹çš„æ•°ç›®åŠ 1
+            State[node] = 1; //æ ‡è®°å·²ç»æ‰¾åˆ°äº†ä»èŠ‚ç‚¹1åˆ°èŠ‚ç‚¹nodeçš„æœ€çŸ­è·¯å¾„
+            for (var = 1; var <= N; var++)//æ›´æ–°è¿˜æ²¡æœ‰æ‰¾åˆ°çš„ç‚¹çš„è·¯å¾„å€¼
+                if ((Dist[var] > Dist[node] + Data[node][var]) && (!State[var]))
+                    Dist[var] = Dist[node] + Data[node][var];
+        } else break;
+    }
+    for (var = 1; var <= N; var++) {
+        if (Dist[var] == MaxNum) printf("-1");
+        else printf("%d", Dist[var]);
+        if (var == N) printf("\n");
+        else printf(" ");
+    }
+    return 0;
 }
