@@ -165,8 +165,8 @@ func main() {
 	operatorOrder["("] = 4
 	operatorOrder[")"] = 0
 
-	const caseNum = 1
-	values := [caseNum]int64{5}
+	const caseNum = 3
+	values := [caseNum]int64{1, 3, 5}
 	result := [caseNum]int64{}
 	for i := 0; i < caseNum; i++ {
 		result[i] = calculateExpression(baseExpression, values[i])
@@ -176,15 +176,15 @@ func main() {
 		scanner.Scan()
 		expression := scanner.Text()
 		expression = filterExpression(expression)
-		same := true
-		for i := 0; same && i < caseNum; i++ {
+		equal := true
+		for i := 0; equal && i < caseNum; i++ {
 			r := calculateExpression(expression, values[i])
 			if r != result[i] {
-				same = false
+				equal = false
 				break
 			}
 		}
-		if same {
+		if equal {
 			fmt.Print(Mark[offset : offset+1])
 		}
 	}
