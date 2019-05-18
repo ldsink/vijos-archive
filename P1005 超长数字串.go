@@ -1,3 +1,7 @@
+/*
+ZHOU Cheng <c.zhou@live.com>
+2019-5-18 22:48:21
+*/
 package main
 
 import (
@@ -7,9 +11,9 @@ import (
 	"strings"
 )
 
-var zero = new(big.Int).SetInt64(0)
-var one = new(big.Int).SetInt64(1)
-var ten = new(big.Int).SetInt64(10)
+var zero = big.NewInt(0)
+var one = big.NewInt(1)
+var ten = big.NewInt(10)
 
 func getBigInt(s string) *big.Int {
 	i, _ := new(big.Int).SetString(s, 10)
@@ -50,19 +54,18 @@ func validateBitAndOffset(bit, offset int, a string) *big.Int {
 	if offset+bit > len(a) {
 		missBit := offset + bit - len(a)
 		prevStr := a[offset-missBit : offset]
+		p := new(big.Int)
 		// 全 9 特殊处理，填充 0
 		if match, _ := regexp.MatchString("^9*$", prevStr); match {
-			p := big.NewInt(0)
-			a += getZeroString(p, missBit)
+			p.SetInt64(0)
 		} else {
-			p := getBigInt(prevStr)
+			p.SetString(prevStr, 10)
 			p.Add(p, one)
-			a += getZeroString(p, missBit)
 		}
+		a += getZeroString(p, missBit)
 	}
 
-	numStr := a[offset : offset+bit]
-	num := getBigInt(numStr)
+	num := getBigInt(a[offset : offset+bit])
 	n := new(big.Int)
 	var left, right int
 	// 检测左边是否满足条件
@@ -104,8 +107,7 @@ func getNumberPosition(num *big.Int, offset int) *big.Int {
 		return result
 	}
 
-	numStr := num.String()
-	length := len(numStr)
+	length := len(num.String())
 	start := big.NewInt(1)
 	for i := 1; i < length; i++ {
 		count := big.NewInt(9)
