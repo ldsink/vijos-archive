@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/big"
+	"regexp"
 	"strings"
 )
 
@@ -29,28 +30,53 @@ func min(a, b int) int {
 	return b
 }
 
+func getZeroString(n int) string {
+	s := ""
+	for ; n > 0; n-- {
+		s += "0"
+	}
+	return s
+}
+
+// 长度为 bit，在 a 中偏移量为 offset 的 num 是否符合条件。不符合返回 zero
 func validateBitAndOffset(bit, offset int, a string) *big.Int {
-	// 长度为 bit，在 a 中偏移量为 offset 的 num 是否符合条件，满足条件返回 num。否则返回 -1
-	numStr := a[offset : offset+bit]
-	if strings.HasPrefix(numStr, "0") {
+	// 零开头的，不符合要求，直接返回 zero
+	if strings.HasPrefix(a[offset:], "0") {
 		return zero
 	}
 
+	// 当目前的长度少于期望的长度，使用前面的值来填充
+	if offset+bit > len(a) {
+		missBit := offset + bit - len(a)
+		prevStr := a[offset-missBit : offset]
+		// 全 9 特殊处理，填充 0
+		if match, _ := regexp.MatchString("^9*$", prevStr); match {
+			a += getZeroString(missBit)
+		} else {
+			p := getBigInt(prevStr)
+			p.Add(p, one)
+			a += p.String()
+		}
+	}
+
+	numStr := a[offset : offset+bit]
 	num := getBigInt(numStr)
 	n := new(big.Int)
 	var left, right int
-	// 检测左边是否满足条件，最多只需要检测一次
+	// 检测左边是否满足条件
 	n.Sub(num, one)
 	right = offset
-	if right > 0 {
+	for right > 0 {
 		if n.Cmp(one) < 0 {
 			return zero
 		}
 		nStr := n.String()
-		left = max(0, offset-len(nStr))
+		left = max(0, right-len(nStr))
 		if a[left:right] != nStr[len(nStr)-(right-left):] {
 			return zero
 		}
+		right -= len(nStr)
+		n.Sub(n, one)
 	}
 	// 检测右边是否满足条件
 	n.Add(num, one)
@@ -68,8 +94,8 @@ func validateBitAndOffset(bit, offset int, a string) *big.Int {
 	return num
 }
 
+// 计算数字出现的位置
 func getNumberPosition(num *big.Int, offset int) *big.Int {
-	// 获得这个数字前面计算 offset 之后出现的位置
 	result := big.NewInt(0 - int64(offset))
 	if num.Cmp(ten) < 0 {
 		result.Add(result, num)
@@ -78,7 +104,7 @@ func getNumberPosition(num *big.Int, offset int) *big.Int {
 
 	numStr := num.String()
 	length := len(numStr)
-	start := one
+	start := new(big.Int).SetInt64(1)
 	for i := 1; i < length; i++ {
 		count := big.NewInt(9)
 		count.Mul(count, start)
@@ -98,21 +124,29 @@ func getNumberPosition(num *big.Int, offset int) *big.Int {
 func main() {
 	var a string
 	_, _ = fmt.Scanf("%s", &a)
-	//fmt.Println(endlessEnumerate(a)) // debug
 
-	n := getBigInt(a)
-	if n.Cmp(zero) == 0 {
-		num := getBigInt("1" + a)
-		fmt.Println(getNumberPosition(num, -1))
-		return
+	baseOffset := 0
+	// 全 0 特殊处理
+	if match, _ := regexp.MatchString("^0*$", a); match {
+		a = "1" + a
+		baseOffset = -1
 	}
+
+	best := new(big.Int).SetInt64(0)
 	for i, j := 1, len(a); i <= j; i++ {
-		for offset := 0; offset < i; offset++ {
+		for offset := i - 1; offset >= 0; offset-- {
 			num := validateBitAndOffset(i, offset, a)
 			if num.Cmp(zero) > 0 {
-				fmt.Println(getNumberPosition(num, offset))
-				return
+				curr := getNumberPosition(num, offset+baseOffset)
+				if best.Cmp(zero) == 0 || best.Cmp(curr) > 0 {
+					best = curr
+				}
 			}
+		}
+		// 当前位数寻找到最有结果，打印并结束循环
+		if best.Cmp(zero) > 0 {
+			fmt.Println(best.String())
+			break
 		}
 	}
 }
