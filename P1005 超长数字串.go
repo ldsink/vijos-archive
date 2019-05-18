@@ -129,11 +129,11 @@ func main() {
 	var a string
 	_, _ = fmt.Scanf("%s", &a)
 
-	baseOffset := 0
 	// 全 0 特殊处理
 	if match, _ := regexp.MatchString("^0*$", a); match {
-		a = "1" + a
-		baseOffset = -1
+		num := getBigInt("1" + a)
+		fmt.Println(getNumberPosition(num, -1))
+		return
 	}
 
 	best := big.NewInt(0)
@@ -141,13 +141,13 @@ func main() {
 		for offset := i - 1; offset >= 0; offset-- {
 			num := validateBitAndOffset(i, offset, a)
 			if num.Cmp(zero) > 0 {
-				curr := getNumberPosition(num, offset+baseOffset)
+				curr := getNumberPosition(num, offset)
 				if best.Cmp(zero) == 0 || best.Cmp(curr) > 0 {
 					best = curr
 				}
 			}
 		}
-		// 当前位数寻找到最有结果，打印并结束循环
+		// 当前位数寻找到最优结果，打印并结束循环
 		if best.Cmp(zero) > 0 {
 			fmt.Println(best.String())
 			break
