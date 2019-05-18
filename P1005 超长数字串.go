@@ -30,10 +30,11 @@ func min(a, b int) int {
 	return b
 }
 
-func getZeroString(n int) string {
-	s := ""
-	for ; n > 0; n-- {
-		s += "0"
+// 获取填充 0 的长度为 n 的数值字符串
+func getZeroString(value *big.Int, n int) string {
+	s := value.String()
+	for n = n - len(s); n > 0; n-- {
+		s = "0" + s
 	}
 	return s
 }
@@ -51,11 +52,12 @@ func validateBitAndOffset(bit, offset int, a string) *big.Int {
 		prevStr := a[offset-missBit : offset]
 		// 全 9 特殊处理，填充 0
 		if match, _ := regexp.MatchString("^9*$", prevStr); match {
-			a += getZeroString(missBit)
+			p := big.NewInt(0)
+			a += getZeroString(p, missBit)
 		} else {
 			p := getBigInt(prevStr)
 			p.Add(p, one)
-			a += p.String()
+			a += getZeroString(p, missBit)
 		}
 	}
 
@@ -104,7 +106,7 @@ func getNumberPosition(num *big.Int, offset int) *big.Int {
 
 	numStr := num.String()
 	length := len(numStr)
-	start := new(big.Int).SetInt64(1)
+	start := big.NewInt(1)
 	for i := 1; i < length; i++ {
 		count := big.NewInt(9)
 		count.Mul(count, start)
@@ -132,7 +134,7 @@ func main() {
 		baseOffset = -1
 	}
 
-	best := new(big.Int).SetInt64(0)
+	best := big.NewInt(0)
 	for i, j := 1, len(a); i <= j; i++ {
 		for offset := i - 1; offset >= 0; offset-- {
 			num := validateBitAndOffset(i, offset, a)
